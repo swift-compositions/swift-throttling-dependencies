@@ -11,7 +11,6 @@
 // ===----------------------------------------------------------------------===//
 
 import Dependencies_Test_Support
-import Foundation
 import Testing
 
 @testable import Throttling_Dependencies
@@ -26,7 +25,7 @@ struct `Throttling Dependencies Tests` {
 extension `Throttling Dependencies Tests`.Unit {
     @Test
     func `checkLimit reads its timestamp from the date dependency`() async {
-        let frozen = Date(timeIntervalSince1970: 1_000_000)
+        let frozen = `Throttling Dependencies Tests`.frozen
         let limiter = RateLimiter<String>(
             windows: [.minutes(1, maxAttempts: 1)]
         )
@@ -46,7 +45,7 @@ extension `Throttling Dependencies Tests`.Unit {
 
     @Test
     func `advancing the injected date rolls the rate-limit window`() async {
-        let frozen = Date(timeIntervalSince1970: 1_000_000)
+        let frozen = `Throttling Dependencies Tests`.frozen
         let limiter = RateLimiter<String>(
             windows: [.minutes(1, maxAttempts: 1)]
         )
@@ -54,7 +53,7 @@ extension `Throttling Dependencies Tests`.Unit {
         await limiter.recordAttempt("key", timestamp: frozen)
 
         await withDependencies {
-            $0.date = .constant(frozen.addingTimeInterval(120))
+            $0.date = .constant(`Throttling Dependencies Tests`.twoMinutesAfterFrozen)
         } operation: {
             let result = await limiter.checkLimit("key")
             #expect(result.isAllowed)
