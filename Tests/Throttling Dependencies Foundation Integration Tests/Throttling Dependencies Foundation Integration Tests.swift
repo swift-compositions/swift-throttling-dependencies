@@ -13,19 +13,20 @@
 import Dependencies_Test_Support
 import Testing
 
-@testable import Throttling_Dependencies
+import Throttling_Dependencies
+import Throttling_Dependencies_Foundation_Integration
 
 @Suite
-struct `Throttling Dependencies Tests` {
+struct `Throttling Dependencies Foundation Integration Tests` {
     @Suite struct Unit {}
     @Suite struct `Edge Case` {}
     @Suite struct Integration {}
 }
 
-extension `Throttling Dependencies Tests`.Unit {
+extension `Throttling Dependencies Foundation Integration Tests`.Unit {
     @Test
     func `checkLimit reads its timestamp from the date dependency`() async {
-        let frozen = `Throttling Dependencies Tests`.frozen
+        let frozen = `Throttling Dependencies Foundation Integration Tests`.frozen
         let limiter = RateLimiter<String>(
             windows: [.minutes(1, maxAttempts: 1)]
         )
@@ -45,7 +46,7 @@ extension `Throttling Dependencies Tests`.Unit {
 
     @Test
     func `advancing the injected date rolls the rate-limit window`() async {
-        let frozen = `Throttling Dependencies Tests`.frozen
+        let frozen = `Throttling Dependencies Foundation Integration Tests`.frozen
         let limiter = RateLimiter<String>(
             windows: [.minutes(1, maxAttempts: 1)]
         )
@@ -53,7 +54,7 @@ extension `Throttling Dependencies Tests`.Unit {
         await limiter.recordAttempt("key", timestamp: frozen)
 
         await withDependencies {
-            $0.date = .constant(`Throttling Dependencies Tests`.twoMinutesAfterFrozen)
+            $0.date = .constant(`Throttling Dependencies Foundation Integration Tests`.twoMinutesAfterFrozen)
         } operation: {
             let result = await limiter.checkLimit("key")
             #expect(result.isAllowed)
@@ -61,7 +62,7 @@ extension `Throttling Dependencies Tests`.Unit {
     }
 }
 
-extension `Throttling Dependencies Tests`.Integration {
+extension `Throttling Dependencies Foundation Integration Tests`.Integration {
     @Test
     func `the live date dependency stamps a current timestamp`() async {
         let limiter = RateLimiter<String>(

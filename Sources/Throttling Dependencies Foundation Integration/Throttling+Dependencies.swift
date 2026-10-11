@@ -12,7 +12,7 @@
 
 public import Clocks_Dependencies
 public import Dependencies
-public import Foundation
+import Foundation
 public import Throttling
 
 // MARK: - RateLimiter

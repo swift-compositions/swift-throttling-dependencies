@@ -30,7 +30,11 @@ let package = Package(
         .library(
             name: "Throttling Dependencies",
             targets: ["Throttling Dependencies"]
-        )
+        ),
+        .library(
+            name: "Throttling Dependencies Foundation Integration",
+            targets: ["Throttling Dependencies Foundation Integration"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/swift-compositions/swift-throttling.git", branch: "main"),
@@ -43,13 +47,22 @@ let package = Package(
             dependencies: [
                 .product(name: "Throttling", package: "swift-throttling"),
                 .product(name: "Clocks Dependencies", package: "swift-clocks-dependencies"),
+            ]
+        ),
+        .target(
+            name: "Throttling Dependencies Foundation Integration",
+            dependencies: [
+                .target(name: "Throttling Dependencies"),
+                .product(name: "Throttling", package: "swift-throttling"),
+                .product(name: "Clocks Dependencies", package: "swift-clocks-dependencies"),
                 .product(name: "Dependencies", package: "swift-dependencies"),
             ]
         ),
         .testTarget(
-            name: "Throttling Dependencies Tests",
+            name: "Throttling Dependencies Foundation Integration Tests",
             dependencies: [
-                "Throttling Dependencies",
+                .target(name: "Throttling Dependencies"),
+                .target(name: "Throttling Dependencies Foundation Integration"),
                 .product(name: "Dependencies Test Support", package: "swift-dependencies"),
             ]
         ),
