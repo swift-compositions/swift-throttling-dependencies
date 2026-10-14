@@ -1,25 +1,9 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-throttling-dependencies open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-throttling-dependencies
-// project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-public import Clocks_Dependencies
-public import Dependencies
+import Clocks_Dependencies
+import Dependencies
 import Foundation
 public import Throttling
 
-// MARK: - RateLimiter
-
 extension RateLimiter {
-    /// Checks whether a request should be allowed, timestamped from the
-    /// `\.date` dependency.
     public func checkLimit(
         _ key: Key
     ) async -> RateLimitResult {
@@ -30,10 +14,7 @@ extension RateLimiter {
     }
 }
 
-// MARK: - RequestPacer
-
 extension RequestPacer {
-    /// Schedules a request, timestamped from the `\.date` dependency.
     public func scheduleRequest(
         _ key: Key
     ) async -> ScheduleResult {
@@ -44,10 +25,7 @@ extension RequestPacer {
     }
 }
 
-// MARK: - ThrottledClient
-
 extension ThrottledClient {
-    /// Acquires a slot, timestamped from the `\.date` dependency.
     public func acquire(
         _ key: Key
     ) async -> AcquisitionResult {
